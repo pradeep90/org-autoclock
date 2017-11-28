@@ -24,7 +24,7 @@ If none exists, signal the user."
   (interactive "P")
   (setq org-autoclock-timer (run-with-timer 1 5 'org-autoclock)))
 
-(defun org-autoclock-cancel (&optional arg)
+(defun org-autoclock-stop (&optional arg)
   "Cancel automatic clocking. Clock out of any running clock."
   (interactive "P")
   (cancel-timer org-autoclock-timer)
