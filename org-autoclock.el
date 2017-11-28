@@ -35,3 +35,5 @@ If none exists, signal the user."
     (org-clock-out nil t)
     ;; Should not fail when there's no running clock.
     (should (or (org-autoclock) t))))
+
+(provide 'org-autoclock)
