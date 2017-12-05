@@ -43,6 +43,35 @@ If none exists, signal the user."
   (cancel-timer org-autoclock-timer)
   (org-clock-out nil t))
 
+;;; HACK: Have to use this giant workaround because Emacs 24 doesn't have
+;;; inhibit-message.
+(defadvice message (around suppress-messages)
+  "Make `message' a no-op."
+  (ignore))
+
+(defadvice org-clock-in-last (around org-clock-in-last-suppress-messages)
+  "Suppress messages within this function.
+Adapted from https://superuser.com/questions/669701/emacs-disable-some-minibuffer-messages."
+  (ad-enable-advice 'message 'around 'suppress-messages)
+  (ad-activate 'message)
+  (unwind-protect
+      ad-do-it
+    (ad-disable-advice 'message 'around 'suppress-messages)
+    (ad-activate 'message)))
+
+(defadvice org-clock-out (around org-clock-out-suppress-messages)
+  "Suppress messages within this function.
+Adapted from https://superuser.com/questions/669701/emacs-disable-some-minibuffer-messages."
+  (ad-enable-advice 'message 'around 'suppress-messages)
+  (ad-activate 'message)
+  (unwind-protect
+      ad-do-it
+    (ad-disable-advice 'message 'around 'suppress-messages)
+    (ad-activate 'message)))
+
+(ad-activate 'org-clock-in-last)
+(ad-activate 'org-clock-out)
+
 (ert-deftest org-autoclock--no-running-clock ()
   (with-temp-buffer
     (org-clock-out nil t)
