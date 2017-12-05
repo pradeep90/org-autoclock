@@ -43,8 +43,11 @@ If none exists, signal the user."
 (defun org-autoclock-stop (&optional arg)
   "Cancel automatic clocking. Clock out of any running clock."
   (interactive "P")
-  (cancel-timer org-autoclock-timer)
-  (org-clock-out nil t))
+  (when org-autoclock-timer
+    (cancel-timer org-autoclock-timer))
+  (org-clock-out nil t)
+  (with-current-buffer (find-file-noselect org-autoclock-logfile t)
+    (save-buffer)))
 
 ;;; HACK: Have to use this giant workaround because Emacs 24 doesn't have
 ;;; inhibit-message.
@@ -80,5 +83,11 @@ Adapted from https://superuser.com/questions/669701/emacs-disable-some-minibuffe
     (org-clock-out nil t)
     ;; Should not fail when there's no running clock.
     (should (or (org-autoclock) t))))
+
+;; Manual test:
+ ;; Kill Emacs without clocking out -> org-autoclock should automatically clock
+;; out and *save* the log file. No dangling clocks.
+
+(add-hook 'kill-emacs-hook (lambda () (org-autoclock-stop)))
 
 (provide 'org-autoclock)
