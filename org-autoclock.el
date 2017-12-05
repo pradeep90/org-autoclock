@@ -6,6 +6,9 @@
 (defvar org-autoclock-logfile "~/.org-autoclock-log.org"
   "Log file where the session durations are stored.")
 
+(defvar org-autoclock-default-task-name "XINU"
+  "Default name for the clocked task.")
+
 (defvar org-autoclock-timer-delay 5
   "Delay in seconds before timer automatically clocks in or out.")
 
@@ -31,7 +34,7 @@ If none exists, signal the user."
   (interactive "P")
   (with-current-buffer (find-file-noselect org-autoclock-logfile)
     (goto-char (point-max))
-    (insert "\n* XINU task")
+    (insert (format "\n* %s" org-autoclock-default-task-name))
     (org-clock-in)
     (org-clock-out)
     (save-buffer))
