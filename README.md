@@ -20,11 +20,11 @@ Put `org-autoclock.el` somewhere in your load-path and add this to your `.emacs`
 
 # Start automatic clocking
 
-First, clock in to the Org-mode task you want. This will be the task that is automatically clocked in and out of.
-
-Then,
-
 	M-x org-autoclock-start
+
+This will clock into and out of your current Org task (which is by default a task created in `~/.org-autoclock-log.org`).
+
+You can clock in to any other task and `org-autoclock` will work for that instead.
 
 # Stop automatic clocking
 
